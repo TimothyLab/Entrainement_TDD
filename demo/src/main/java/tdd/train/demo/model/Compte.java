@@ -15,31 +15,40 @@ public class Compte {
         return balance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
+    
 
     //méthode pour déposer de l'argent sur le compte
     public void deposer(int montant) {
+        verifierMontantValide(montant);
         this.balance += montant;
     }
 
 
     //méthode pour retirer de l'argent du compte
     public void retirer(int montant) {
-
-        if (montant <= this.balance) {
-
+        verifierMontantValide(montant);
+        verifierSolvabilite(montant);
         this.balance -= montant;
-        } else { throw new OverBalanceException("Le solde ne peut pas devenir négatif");
-        }
+    
     }
 
     public void virement(Compte oc, int montant) {
-        if (montant < this.balance) {
+        verifierMontantValide(montant);
+        verifierSolvabilite(montant);
         this.retirer(montant);
         oc.deposer(montant);
-        } else { throw new EchecVirementException("Le virement a échoué, solde insuffisant");
+        
+    }
+
+    public void verifierSolvabilite(int montant) {
+        if (montant >this.balance) {
+            throw new OverBalanceException("Le solde ne peut pas devenir négatif");
+        }
+    }
+
+    private void verifierMontantValide(int montant) {
+        if (montant <= 0) {
+            throw new IllegalArgumentException("Montant invalide");
         }
     }
     

@@ -2,7 +2,7 @@ package tdd.train.demo.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -77,7 +77,7 @@ public class CompteTest {
         Compte c2 = new Compte(50);
 
         
-         assertThrows(EchecVirementException.class,
+         assertThrows(OverBalanceException.class,
         () -> c1.virement(c2, 300));
         assertEquals(100, c1.getBalance());
         assertEquals(50, c2.getBalance());
