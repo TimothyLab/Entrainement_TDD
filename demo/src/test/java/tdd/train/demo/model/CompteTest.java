@@ -3,88 +3,74 @@ package tdd.train.demo.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import tdd.train.demo.exception.EchecVirementException;
-import tdd.train.demo.exception.OverBalanceException;
+import tdd.train.demo.exception.FondInsuffisantException;
+import tdd.train.demo.repository.CompteRepository;
+import tdd.train.demo.service.CompteService;
 
+@ExtendWith(MockitoExtension.class)
 public class CompteTest {
 
     @Mock
     Compte c1;
 
+    @Mock
+    private CompteRepository compteRepository;
+
+    @Mock 
+    Liquidite montant;
+
+    @Mock
+    private Compte compteSource;
+
+    @Mock 
+    private Compte compteDestination;
+
+    @InjectMocks
+    private CompteService compteService;
+
 
     @Test
     void should_create_compte_with_initial_balance() {
-        Compte compte = new Compte(100);
-        assert compte.getBalance() == 100;
+        Compte compte = new Compte(1, new Liquidite(100));
+        assert compte.getBalance().montant() == new Liquidite(100).montant();
     }
 
 
     //déposer de l'argent sur le compte
     @Test 
     void should_update_balance() {
-        Compte compte = new Compte(100);
-        compte.deposer(150);
-        assert compte.getBalance() == 250;
+        Compte compte = new Compte(1, new Liquidite(100));
+        compte.deposer(new Liquidite(100));
+        assert compte.getBalance().montant() == new Liquidite(200).montant();
     }
 
 
     //retirer de l'argent du compte
     @Test
     void should_withdraw_money() {
-        Compte compte = new Compte(100);
-        compte.retirer(50);
-        assert compte.getBalance() == 50;
-    }
-
-
-    //empêcher le solde de devenir négatif 
-    @Test 
-    void should_allow_negative_balance() {
-        Compte compte = new Compte(100);
-        compte.retirer(50);
-        assert compte.getBalance() == 50; // le solde ne doit pas devenir négatif
+        Compte compte = new Compte(1, new Liquidite(100));
+        compte.retirer(new Liquidite(100));
+        assert compte.getBalance().montant() == new Liquidite(0).montant();
     }
 
     @Test
     void shoud_return_exception_when_withdraw_more_than_balance() {
-        Compte compte = new Compte(100);
+        Compte compte = new Compte(1, new Liquidite(100));
         
-        assertThrows(OverBalanceException.class, () -> compte.retirer(150));
-        assertEquals(100, compte.getBalance()); 
-        
-    }
-
-    @Test
-    void should_make_transaction_to_other_account() {
-
-        Compte c1 = new Compte(100);
-        Compte c2 = new Compte(50);
-
-        c1.virement(c2, 30);
-
-        assertEquals(70, c1.getBalance());
-        assertEquals(80, c2.getBalance());
-
-    }
-
-    @Test
-    void should_not_allow_transaction_to_other_account() {
-        Compte c1 = new Compte(100);
-        Compte c2 = new Compte(50);
-
-        
-         assertThrows(OverBalanceException.class,
-        () -> c1.virement(c2, 300));
-        assertEquals(100, c1.getBalance());
-        assertEquals(50, c2.getBalance());
-        
-
+        assertThrows(FondInsuffisantException.class, () -> compte.retirer(new Liquidite(150)));
+        assertEquals(100, compte.getBalance().montant()); 
         
     }
+
+  
+
+    
 
 
 

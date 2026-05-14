@@ -1,53 +1,66 @@
 package tdd.train.demo.model;
 
-import tdd.train.demo.exception.EchecVirementException;
-import tdd.train.demo.exception.OverBalanceException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "compte")
 public class Compte {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "compte_id")
+    private Integer id;
+
+    @Embedded
     private Liquidite balance;
+
+
+    
+    public Compte() {
+    }
 
     public Compte( Liquidite balance) {
         this.balance = balance;
+    }
+
+    public Compte(Integer id, Liquidite balance) {
+        this.id = id;
+        this.balance = balance;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public Liquidite getBalance() {
         return balance;
     }
 
-    
 
     //méthode pour déposer de l'argent sur le compte
     public void deposer(Liquidite montant) {
-        verifierMontantValide(montant);
+        
         this.balance = balance.ajouter(montant);
     }
 
 
     //méthode pour retirer de l'argent du compte
     public void retirer(Liquidite montant) {
-        verifierMontantValide(montant);
-        verifierSolvabilite(montant);
+       
         this.balance = balance.retirer(montant);
     
     }
 
-    public void virement(Compte compteDestinataire, Liquidite montant) {
-        this.retirer(montant);
-        compteDestinataire.deposer(montant);
-        
+    public void changerBalance(Liquidite newbalance) {
+        this.balance= newbalance;
     }
 
-    public void verifierSolvabilite(Liquidite montant) {
-        if (montant.montant() >this.balance.montant()) {
-            throw new OverBalanceException("Le solde ne peut pas devenir négatif");
-        }
-    }
-
-    private void verifierMontantValide(Liquidite montant) {
-        if (montant.montant() <= 0) {
-            throw new IllegalArgumentException("Montant invalide");
-        }
-    }
+  
     
 }
