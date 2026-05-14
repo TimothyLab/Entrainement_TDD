@@ -5,49 +5,47 @@ import tdd.train.demo.exception.OverBalanceException;
 
 public class Compte {
 
-    private int balance;
+    private Liquidite balance;
 
-    public Compte( int balance) {
+    public Compte( Liquidite balance) {
         this.balance = balance;
     }
 
-    public int getBalance() {
+    public Liquidite getBalance() {
         return balance;
     }
 
     
 
     //méthode pour déposer de l'argent sur le compte
-    public void deposer(int montant) {
+    public void deposer(Liquidite montant) {
         verifierMontantValide(montant);
-        this.balance += montant;
+        this.balance = balance.ajouter(montant);
     }
 
 
     //méthode pour retirer de l'argent du compte
-    public void retirer(int montant) {
+    public void retirer(Liquidite montant) {
         verifierMontantValide(montant);
         verifierSolvabilite(montant);
-        this.balance -= montant;
+        this.balance = balance.retirer(montant);
     
     }
 
-    public void virement(Compte oc, int montant) {
-        verifierMontantValide(montant);
-        verifierSolvabilite(montant);
+    public void virement(Compte compteDestinataire, Liquidite montant) {
         this.retirer(montant);
-        oc.deposer(montant);
+        compteDestinataire.deposer(montant);
         
     }
 
-    public void verifierSolvabilite(int montant) {
-        if (montant >this.balance) {
+    public void verifierSolvabilite(Liquidite montant) {
+        if (montant.montant() >this.balance.montant()) {
             throw new OverBalanceException("Le solde ne peut pas devenir négatif");
         }
     }
 
-    private void verifierMontantValide(int montant) {
-        if (montant <= 0) {
+    private void verifierMontantValide(Liquidite montant) {
+        if (montant.montant() <= 0) {
             throw new IllegalArgumentException("Montant invalide");
         }
     }
