@@ -6,5 +6,5 @@ import tdd.train.AgricoreFinanceService.model.Compte;
 
 public interface CompteRepository extends JpaRepository<Compte,Integer> {
 
-
+    Compte findByUserId(Integer userId);
 }

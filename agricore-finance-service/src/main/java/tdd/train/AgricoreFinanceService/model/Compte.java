@@ -21,11 +21,18 @@ public class Compte {
     private Liquidite balance;
 
 
+    private Integer userId;
+
+
     
     public Compte() {
     }
 
     public Compte( Liquidite balance) {
+        this.balance = balance;
+    }
+    public Compte( Liquidite balance,Integer userId) {
+        this.userId = userId;
         this.balance = balance;
     }
 
@@ -42,6 +49,16 @@ public class Compte {
         return balance;
     }
 
+    
+
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     //méthode pour déposer de l'argent sur le compte
     public void deposer(Liquidite montant) {
@@ -59,6 +76,11 @@ public class Compte {
 
     public void changerBalance(Liquidite newbalance) {
         this.balance= newbalance;
+    }
+
+    public Compte orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
     }
 
   

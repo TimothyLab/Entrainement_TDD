@@ -18,8 +18,8 @@ public class CompteService {
 
     public void virement(Integer sourceId, Integer destinationId, Liquidite montant) {
 
-        Compte source = compteRepository.findById(sourceId).orElseThrow(() ->new CompteNotFoundException(sourceId));
-        Compte destination = compteRepository.findById(destinationId).orElseThrow(() ->new CompteNotFoundException(destinationId));
+        Compte source = compteRepository.findByUserId(sourceId);
+        Compte destination = compteRepository.findByUserId(destinationId);
 
         source.retirer(montant);
         destination.deposer(montant);

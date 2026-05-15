@@ -20,6 +20,8 @@ import tdd.train.AgricoreFinanceService.model.Compte;
 import tdd.train.AgricoreFinanceService.model.Liquidite;
 import tdd.train.AgricoreFinanceService.repository.CompteRepository;
 import tdd.train.AgricoreFinanceService.service.CompteService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/comptes")
@@ -57,6 +59,13 @@ public class CompteController {
                 .toList();
 
     }
+
+    @GetMapping("/user/{id}")
+    public CompteResponseDTO getByUserId(@PathVariable Integer id) {
+        Compte compte = compteRepository.findByUserId(id);
+        return CompteResponseDTO.convert(compte);
+    }
+    
 
     @GetMapping("/{id}")
     public CompteResponseDTO getById(Integer id) {
