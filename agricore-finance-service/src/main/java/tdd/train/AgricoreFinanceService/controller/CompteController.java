@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tdd.train.AgricoreFinanceService.dto.CompteRequestCreateDTO;
 import tdd.train.AgricoreFinanceService.dto.CompteRequestDTO;
 import tdd.train.AgricoreFinanceService.dto.CompteResponseDTO;
 import tdd.train.AgricoreFinanceService.dto.TransfertRequestDTO;
@@ -75,9 +76,9 @@ public class CompteController {
     }
 
     @PostMapping
-    public CompteResponseDTO create( @RequestBody CompteRequestDTO compteRequestDTO) {
+    public CompteResponseDTO create( @RequestBody CompteRequestCreateDTO compteRequestCreateDTO) {
 
-        Compte compte = new Compte(new Liquidite(compteRequestDTO.balance()));
+        Compte compte = new Compte(new Liquidite(compteRequestCreateDTO.balance()), compteRequestCreateDTO.userId());
 
         compteRepository.save(compte);
 

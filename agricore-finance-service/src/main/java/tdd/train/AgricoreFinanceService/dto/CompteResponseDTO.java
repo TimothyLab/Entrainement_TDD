@@ -1,16 +1,16 @@
 package tdd.train.AgricoreFinanceService.dto;
 
 import tdd.train.AgricoreFinanceService.model.Compte;
-import tdd.train.AgricoreFinanceService.model.Liquidite;
 
 public record CompteResponseDTO (
 
-    Integer id,
-    Integer balance
+    Integer balance,
+    Integer userId 
+
 
 ) {
     public static CompteResponseDTO convert(Compte compte) {
-        return new CompteResponseDTO(compte.getId(), compte.getBalance().montant());
+        return new CompteResponseDTO(compte.getBalance().montant(), compte.getUserId());
     }
 
 }
