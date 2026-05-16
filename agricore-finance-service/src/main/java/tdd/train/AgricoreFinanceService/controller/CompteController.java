@@ -68,7 +68,7 @@ public class CompteController {
     
 
     @GetMapping("/{id}")
-    public CompteResponseDTO getById(Integer id) {
+    public CompteResponseDTO getById(@PathVariable Integer id) {
 
         return CompteResponseDTO.convert(compteRepository.findById(id).orElseThrow(() -> new CompteNotFoundException(id)));
 
@@ -77,7 +77,7 @@ public class CompteController {
     @PostMapping
     public CompteResponseDTO create( @RequestBody CompteRequestDTO compteRequestDTO) {
 
-        Compte compte = new Compte(compteRequestDTO.balance());
+        Compte compte = new Compte(new Liquidite(compteRequestDTO.balance()));
 
         compteRepository.save(compte);
 
@@ -90,7 +90,7 @@ public class CompteController {
 
         Compte compte = compteRepository.findById(id).orElseThrow(() -> new CompteNotFoundException(id));
         
-        compte.changerBalance(compteRequestDTO.balance());
+        compte.changerBalance(new Liquidite(compteRequestDTO.balance()));
 
         compteRepository.save(compte);
 
