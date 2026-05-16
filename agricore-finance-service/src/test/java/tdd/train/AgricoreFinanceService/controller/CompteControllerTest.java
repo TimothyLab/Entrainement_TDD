@@ -32,8 +32,8 @@ public class CompteControllerTest {
     @BeforeEach
     void setUp() {
         repository.deleteAll();
-        repository.save(new Compte(new Liquidite(1000)));
-        repository.save(new Compte(new Liquidite(500)));
+        repository.save(new Compte(new Liquidite(1000),3));
+        repository.save(new Compte(new Liquidite(500),4));
     } // gestion dynamique des id  car ordre d'insertion non garanti ( générer automatiquement par la base de données et pas forcément dans le meme ordres)
       // afin des garantir des tests reproductibles
 
@@ -54,11 +54,11 @@ public class CompteControllerTest {
                 "destinationId": %d,
                 "montant": 100
             }
-            """.formatted(c1.getId(), c2.getId())))
+            """.formatted(c1.getUserId(), c2.getUserId())))
         .andExpect(status().isOk());
 
-    Compte source = repository.findById(c1.getId()).get();
-    Compte dest = repository.findById(c2.getId()).get();
+    Compte source = repository.findByUserId(c1.getUserId());
+    Compte dest = repository.findByUserId(c2.getUserId());
 
     assertEquals(new Liquidite(900), source.getBalance());
     assertEquals(new Liquidite(600), dest.getBalance());

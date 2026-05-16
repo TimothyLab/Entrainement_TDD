@@ -78,10 +78,6 @@ public class Compte {
         this.balance= newbalance;
     }
 
-    public Compte orElseThrow(Object object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
-    }
 
   
     
